@@ -25,14 +25,14 @@ func GetLinks(url string) {
 		var err error
 		contentType, err = GetLinkType(url)
 		if err != nil {
-			log.Error("URL LOAD ERROR [RETRY]", "err", err)
+			//log.Error("URL LOAD ERROR [RETRY]", "err", err)
 			continue
 		}
 		break
 	}
 
 	if contentType != "text/html" {
-		log.Info("STOP ON contentType != html/text", "url", url)
+		//log.Info("STOP ON contentType != html/text", "url", url)
 		return
 	}
 
@@ -45,7 +45,6 @@ func GetLinks(url string) {
 	nodes := htmlquery.Find(doc, `//div[@class="table-responsive"]//table//tr`)
 	for _, node := range nodes {
 		tmpNode := htmlquery.FindOne(node, `.//td[2]//a`)
-		//log.Info("node info", "tmpNode", tmpNode.Data, "text", htmlquery.InnerText(tmpNode))
 		if htmlquery.InnerText(tmpNode) == ".." {
 			continue
 		}
