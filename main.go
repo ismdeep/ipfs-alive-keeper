@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/antchfx/htmlquery"
-	"github.com/ismdeep/ismdeep-go-utils/args_util"
+	"github.com/ismdeep/args"
+	"github.com/ismdeep/ipfs-alive-keeper/config"
 	"github.com/ismdeep/log"
 	"net/http"
 	"os"
+	"sync"
 )
 
 func GetLinkType(url string) (string, error) {
@@ -33,6 +35,14 @@ func GetLinks(url string) {
 
 	if contentType != "text/html" {
 		//log.Info("STOP ON contentType != html/text", "url", url)
+		for {
+			client := http.Client{}
+			_, err := client.Get(url)
+			if err != nil {
+				continue
+			}
+			break
+		}
 		return
 	}
 
@@ -59,11 +69,33 @@ func main() {
 		return
 	}
 
-	if args_util.Exists("--help") {
+	if args.Exists("--help") {
 		fmt.Println(HelpMsg())
 		return
 	}
 
-	ipfsUrl := os.Args[1]
-	GetLinks(ipfsUrl)
+	if !args.Exists("-c") {
+		fmt.Println(HelpMsg())
+		return
+	}
+
+	// 加载配置
+	configPath := args.GetValue("-c")
+	if err := config.Load(configPath); err != nil {
+		panic(err)
+	}
+
+	var wg sync.WaitGroup
+
+	for _, link := range config.DefaultConf.Links {
+		wg.Add(1)
+		go func(ipfsURL string) {
+			for {
+				GetLinks(ipfsURL)
+			}
+			wg.Done()
+		}(link)
+	}
+
+	wg.Wait()
 }

@@ -10,8 +10,8 @@ github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
 github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e h1:1r7pUrabqp18hOBcwBwiTsbnFeTZHV9eER/QT5JVZxY=
 github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e/go.mod h1:cIg4eruTrX1D+g88fzRXU5OdNfaM+9IcxsU14FzY7Hc=
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
-github.com/ismdeep/ismdeep-go-utils v0.0.2 h1:bl8VrRu1/t1RExplNtXiR9wq9wjCzmN9yEokJTcNXsU=
-github.com/ismdeep/ismdeep-go-utils v0.0.2/go.mod h1:94RTJ3FQDoI2QO76BNqwhKT6yzCtuqrPNI1X4LxAlJM=
+github.com/ismdeep/args v0.0.2 h1:4XIgMMghhP1oHnnD9HHvnXUN+ixJUwJX8FqZDixVuno=
+github.com/ismdeep/args v0.0.2/go.mod h1:GB94gj4zvBXS15/Q8EcCtS3K99K497De0dtVsLG6Omg=
 github.com/ismdeep/log v0.0.3 h1:qk4IVUXaVpa7vcu4IW91Ahaws38AQfOUGCmDC+B2FYw=
 github.com/ismdeep/log v0.0.3/go.mod h1:0nH0jKic5su3Bd+AE+BHG1iCZT/iUGRuYzliOSL+nMQ=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=

@@ -2,6 +2,6 @@ package main
 
 func HelpMsg() string {
 	return "" +
-		"Usage: ipfs-alive-keeper <IPFS-URL>\n" +
-		"        <IPFS-URL>    IPFS URL\n"
+		"Usage: ipfs-alive-keeper -c <Config File Path>\n" +
+		"        <Config File Path>    Config File Path\n"
 }
