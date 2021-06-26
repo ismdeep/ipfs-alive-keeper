@@ -10,5 +10,4 @@ MAINTAINER "L. Jiang <l.jiang.1024@gmail.com>"
 COPY --from=builder /ipfs-alive-keeper /
 RUN apk add --no-cache tzdata
 RUN chmod +x /ipfs-alive-keeper
-EXPOSE 80
 CMD ["/ipfs-alive-keeper", "-c", "/config.toml"]
