@@ -3,7 +3,8 @@ package config
 import "github.com/BurntSushi/toml"
 
 type Config struct {
-	Links []string
+	Links    []string
+	Routines uint
 }
 
 var DefaultConf *Config

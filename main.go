@@ -11,6 +11,8 @@ import (
 	"sync"
 )
 
+var LinksChan chan string
+
 func GetLinkType(url string) (string, error) {
 	client := &http.Client{}
 	r, err := client.Get(url)
@@ -20,7 +22,7 @@ func GetLinkType(url string) (string, error) {
 	return r.Header.Get("content-type"), nil
 }
 
-func GetLinks(url string) {
+func GetLinks(url string) []string {
 	log.Info("START LOAD URL", "url", url)
 	contentType := ""
 	for {
@@ -43,14 +45,16 @@ func GetLinks(url string) {
 			}
 			break
 		}
-		return
+		return []string{}
 	}
 
 	doc, err := htmlquery.LoadURL(url)
 	if err != nil {
 		log.Error("get links", "err", err)
-		return
+		return []string{}
 	}
+
+	subLinks := make([]string, 0)
 
 	nodes := htmlquery.Find(doc, `//div[@class="table-responsive"]//table//tr`)
 	for _, node := range nodes {
@@ -58,8 +62,19 @@ func GetLinks(url string) {
 		if htmlquery.InnerText(tmpNode) == ".." {
 			continue
 		}
+		subLinks = append(subLinks, fmt.Sprintf("https://ipfs.io%v", htmlquery.SelectAttr(tmpNode, "href")))
+	}
 
-		GetLinks(fmt.Sprintf("https://ipfs.io%v", htmlquery.SelectAttr(tmpNode, "href")))
+	return subLinks
+}
+
+func ConsumerFunc() {
+	for {
+		link := <-LinksChan
+		subLinks := GetLinks(link)
+		for _, subLink := range subLinks {
+			LinksChan <- subLink
+		}
 	}
 }
 
@@ -85,16 +100,18 @@ func main() {
 		panic(err)
 	}
 
-	var wg sync.WaitGroup
-
+	LinksChan = make(chan string, 1000000)
 	for _, link := range config.DefaultConf.Links {
+		LinksChan <- link
+	}
+
+	var wg sync.WaitGroup
+	for i := uint(0); i < config.DefaultConf.Routines; i++ {
 		wg.Add(1)
-		go func(ipfsURL string) {
-			for {
-				GetLinks(ipfsURL)
-			}
+		go func() {
+			ConsumerFunc()
 			wg.Done()
-		}(link)
+		}()
 	}
 
 	wg.Wait()
