@@ -22,7 +22,7 @@ jobs:
       - name: Go release
         uses: goreleaser/goreleaser-action@v1
       - name: Docker release
-        uses: elgohr/Publish-Docker-Github-Action@master
+        uses: elgohr/Publish-Docker-Github-Action@v5
         with:
           name: ismdeep/ipfs-alive-keeper
           username: ${{ secrets.DOCKER_USERNAME }}
